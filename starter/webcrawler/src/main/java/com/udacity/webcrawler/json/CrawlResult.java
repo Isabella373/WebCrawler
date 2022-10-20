@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Data class representing the final result of a web crawl.
  */
@@ -62,6 +64,7 @@ public final class CrawlResult {
     /**
      * Sets the word counts. See {@link #getWordCounts()}
      */
+    @JsonProperty("wordCounts")
     public Builder setWordCounts(Map<String, Integer> wordCounts) {
       this.wordFrequencies = Objects.requireNonNull(wordCounts);
       return this;
@@ -70,6 +73,7 @@ public final class CrawlResult {
     /**
      * Sets the total number of URLs visited. See {@link #getUrlsVisited()}.
      */
+    @JsonProperty("pageCount")
     public Builder setUrlsVisited(int pageCount) {
       this.pageCount = pageCount;
       return this;
