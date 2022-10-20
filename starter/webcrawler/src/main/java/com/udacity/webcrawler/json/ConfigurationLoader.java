@@ -3,8 +3,14 @@ package com.udacity.webcrawler.json;
 import java.io.Reader;
 import java.nio.file.Path;
 import java.util.Objects;
-import com.fasterxml.jackson;
+import java.io.IOException;
+import java.nio.file.Files;
+
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 
 /**
@@ -31,14 +37,8 @@ public final class ConfigurationLoader {
     // TODO: Fill in this method.
     try(Reader reader = Files.newBufferedReader(path)){
       return read(reader);
-    }catch(IOException e){
-      e.printStackTrace();
     }
-    finally{
-      if(reader!=null){
-        reader.close();
-      }
-    }
+
 
     //return new CrawlerConfiguration.Builder().build();
   }
@@ -51,16 +51,18 @@ public final class ConfigurationLoader {
    */
 
 
-  public static CrawlerConfiguration read(Reader reader) throws IOException{
+  public static CrawlerConfiguration read(Reader reader){
     // This is here to get rid of the unused variable warning.
     Objects.requireNonNull(reader);
     // TODO: Fill in this method
     ObjectMapper objectMapper = new ObjectMapper();
-    CrawlerConfiguration klass = null;
-    try(klass = objectMapper.readValue(reader, CrawlerConfiguration.Builder.class)){
-      return klass;
+
+    objectMapper.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
+    try{
+      return objectMapper.readValue(reader, CrawlerConfiguration.class);
     }catch(IOException e){
       e.printStackTrace();
+      return null;
     }
 
 
